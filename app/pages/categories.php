@@ -3,7 +3,10 @@
 		<div class="col-md-12">
 			<div class="card">                
 				<div class="card-header">
-					<h4 class="card-title"> Categories</h4>					
+					<h4 class="card-title"> Categories</h4>		
+					<?php
+						//Parking ID
+						$parkingId = $_GET['pid']; ?>		
 				</div>
 				<div class="card-body">
 					<div class="toolbar">
@@ -17,9 +20,9 @@
 							<div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 								<div class="modal-dialog" role="document">
 									<div class="modal-content">
-										<form id='addUserForm'>
+										<form id='addParkingCategory'>
 											<div class="modal-header">
-												<h5 class="modal-title" id="exampleModalLabel">New user</h5>
+												<h5 class="modal-title" id="exampleModalLabel">New parking category</h5>
 												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 													<span aria-hidden="true">&times;</span>
 												</button>
@@ -28,77 +31,29 @@
 												<div id="feedBack"></div> 										
 												<div class="form-group">
 													<label for="nameInput">Name</label>
-													<input type="text" class="form-control" id="nameInput" aria-describedby="emailHelp" placeholder="Enter user names">
+													<input type="text" class="form-control" id="nameInput" aria-describedby="emailHelp" placeholder="Category name">
 												</div>
 												<div class="form-group">
-													<label for="InputEmail">Email</label>
-													<input type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp" placeholder="Enter email">
+													<label for="descriptionInput">Description</label>
+													<input type="text" class="form-control" id="descriptionInput" aria-describedby="emailHelp" placeholder="Describe this category">
+												</div>
+												
+												<div class="mt-5">Category charges</div>
+												<hr />
+												<div class="form-group">
+													<label for="chargeslhInput">Less than hour</label>
+													<input type="number" class="form-control" id="chargeslhInput" aria-describedby="emailHelp" min="100" placeholder="Charges in FRW">
 												</div>
 												<div class="form-group">
-													<label for="InputPhone">Phone number</label>
-													<input type="number" class="form-control" id="InputPhone" placeholder="User's phone">
+													<label for="descriptionInput">Less than 3 hours</label>
+													<input type="number" class="form-control" id="chargesl3hInput" aria-describedby="emailHelp" placeholder="Charges in FRW" min="100">
 												</div>
-
 												<div class="form-group">
-													<label class="display-5" for="selectRole">UserType</label>
-													<select class="selectpicker form-control" data-size="7" data-style="btn-default btn-round" title="Role" id="selectRole">
-														<?php
-															//getting roles one can create
-															$roles = $User->creatableRoles();
-															foreach ($roles as $name => $printname) {
-																?>
-																	<option value="<?=$name?>"><?=$printname?></option>
-																<?php
-															}
-														?>
-													</select>
-												</div>
-
-												<div class="form-group">
-													<label class="display-5" for="selectRole">Parking</label>
-													<?php
-														$parkings = $Parking->userList($currentUserId);
-													?>
-													<select class="selectpicker form-control" data-size="7" data-style="btn-default btn-round" title="Select " id="selectParking">
-														<?php
-															//getting user's parkings one can create
-															$parkings = $Parking->userList($currentUserId);
-															
-															foreach ($parkings as $key => $parking) {
-																?>
-																	<option value="<?=$parking['id']?>"><?=$parking['name']?></option>
-																<?php
-															}
-														?>
-													</select>
-												</div>
-
-												<div class="form-row m-b-10">
-													<div class="col-12">
-														<label>Gender</label>
-													</div>
-													<div class="col">
-														<div class="form-check-radio position-relative form-check">
-															<label class="form-check-label">
-																<input name="gender" type="radio" class="form-check-input" value="m">
-																<span class="form-check-sign"></span>Male</label>
-														</div>
-													</div>
-													<div class="col">
-														<div class="form-check-radio position-relative form-check">
-															<label class="form-check-label">
-																<input name="gender" type="radio" class="form-check-input" value="f">
-																<span class="form-check-sign"></span>Female</label>
-														</div>
-													</div>
-												</div>
-
-
-												<div class="form-group">
-													<label for="InputPassword">Password</label>
-													<input type="password" class="form-control" id="InputPassword" placeholder="Password">
+													<label for="descriptionInput">More than 3 hours</label>
+													<input type="number" class="form-control" id="chargesm3hInput" aria-describedby="emailHelp" placeholder="Charges in FRW" min="100">
 												</div>
 											</div>
+											<input type="hidden" name="pid" id="PID" value="<?php echo $parkingId ?>">
 											<div class="modal-footer">
 												<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 												<button type="submit" class="btn btn-primary">Create</button>
@@ -128,23 +83,35 @@
 						</tfoot>
 						<tbody>
 							<?php
-								$users = $User->list();
-								foreach ($users as $key => $user) {
-									$userId = $user['id'];
-									$roles = $User->types($userId);
-									?>
-										<tr>
-											<td><?php echo $user['name']; ?></td>
-											<td><?php echo $user['phoneNumber']; ?></td>
-											<td><?php echo $user['email']; ?></td>
-											<td><?php echo WEB::gendername($user['gender']); ?></td>
-											<!-- <td class="text-right">
-												<a href="#" class="btn btn-round btn-info btn-icon btn-sm like"><i class="fas fa-angle-right"></i></a>
-												<a href="#" class="btn btn-round btn-warning btn-icon btn-sm edit"><i class="fas fa-plus"></i></a>
-											</td> -->
-										</tr>
-									<?php
+								if($parkingId){
+									//get categories
+									$categories = $Parking->categories($parkingId);
+
+									if($categories->status){
+										$categories = $categories->data;
+										var_dump($categories);
+										foreach ($categories as $key => $category) {
+											$categoryId = $category['id'];
+											$pricing = "";
+											?>
+												<tr>
+													<td><?php echo $category['name']; ?></td>
+													<td><?php echo 0 ?></td>
+													<td><?php echo $category['createdDate']; ?></td>
+													<td class="text-right">
+														<a href="#" class="btn btn-round btn-info btn-icon btn-sm like"><i class="fas fa-angle-right"></i></a>
+														<a href="#" class="btn btn-round btn-warning btn-icon btn-sm edit"><i class="fas fa-plus"></i></a>
+													</td>
+												</tr>
+											<?php
+										}
+									}else{
+										echo $categories['msg'];
+									}
+
 								}
+								$users = $User->list();
+								
 							?>
 						</tbody>
 					</table>
@@ -154,5 +121,5 @@
 	</div>
 </div>
 <?php
-	$jsFiles = array_merge($jsFiles, array('assets/js/users.js'));
+	$jsFiles = array_merge($jsFiles, array('assets/js/parkingCategories.js'));
 ?>

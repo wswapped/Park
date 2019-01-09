@@ -115,6 +115,48 @@
 			else
 				return false;
 		}
+
+		public function categories($parkingId)
+		{
+			# List of categories in the parking
+			global $conn;
+
+			$query = $conn->query("SELECT * FROM categories where parking = \"$parkingId\" ");
+			if($query){
+				return WEB::respond(true, '', $query->fetch_all(MYSQLI_ASSOC));
+			}else{
+				return WEB::respond(false, "There was a database error $conn->error");
+			}
+		}
+
+		public function addCategory($parkingId, $name, $description, $userId){
+			//adds the parking category in the database
+			global $conn;
+			$sql = "INSERT INTO categories(name, description, parking, createdBy) VALUES(\"$name\", \"$description\", \"$parkingId\", \"$userId\")";
+			$query = $conn->query($sql);
+			if($query){
+				return WEB::respond(true, "", $conn->insert_id);
+			}else{
+				//query has failed
+				return WEB::respond(false, "Error creating category $conn->error");
+			}
+		}
+
+		public function addCategoryFee($categoryId, $duration, $fee, $userId){
+			//adds the parking category in the database
+			global $conn;
+			$sql = "INSERT INTO categoryFees($categoryId, duration, fee, createdBy) VALUES(\"$categoryId\", \"$duration\", \"$fee\", \"$userId\")";
+			$query = $conn->query($sql);
+			if($query){
+				return WEB::respond(true, $conn->insert_id);
+			}else{
+				//query has failed
+				return WEB::respond(false, "Error adding category duration fee $conn->error");
+			}
+		}
+
+
+
 	}
 
 	$Parking = new parking();

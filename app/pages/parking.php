@@ -33,6 +33,7 @@
 							<?php
 								$userParking = $Parking->userList($currentUserId);
 								foreach ($userParking as $key => $park) {
+									$parkId = $park['id'];
 									$parkingData = $Parking->details($park['id']);
 									$pname = $parkingData['name'];
 									$plocation = $parkingData['location'];
@@ -44,7 +45,7 @@
 											<td><?php echo $pcapacity; ?></td>
 											<td>2</td>
 											<td class="text-right">
-												<a href="#" class="btn btn-round btn-info btn-icon btn-sm like"><i class="fas fa-angle-right"></i></a>
+												<a href="categories?pid=<?=$parkId?>" class="btn btn-round btn-info btn-icon btn-sm"><i class="fas fa-angle-right"></i></a>
 												<a href="#" class="btn btn-round btn-warning btn-icon btn-sm edit"><i class="fas fa-plus"></i></a>
 											</td>
 										</tr>

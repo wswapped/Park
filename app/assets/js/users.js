@@ -8,7 +8,7 @@ $("#addUserForm").on('submit', function(e){
 	var phone = $("#InputPhone").val();
 	var gender = $("input[name='gender']:checked").val();
 	var password = $("#InputPassword").val();
-
+	// alert();
 	//checking if all fields are set
 	if(Boolean(name) && Boolean(gender) && Boolean(password) && Boolean(role) && Boolean(parking) && (Boolean(email) || Boolean(name)) ){
 		//here we can submit

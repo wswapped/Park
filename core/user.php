@@ -4,13 +4,51 @@
 		{
 			# adds system user
 			global $conn;
-			$query = $conn->query("INSERT INTO users(name, phoneNumber, email, profilePicture, gender) VALUES (\"$name\", \"$phone\", \"$email\", \"$profile_picture\", \"$gender\") ");
 
-			if($query){
-				return WEB::respond(true, '', array('id'=>$conn->insert_id));
+			//check if phone and email are not used
+			if(!$this->userEmail($email)){
+				//email is free
+				if(!$this->userPhone($phone)){
+					$query = $conn->query("INSERT INTO users(name, phoneNumber, email, profilePicture, gender) VALUES (\"$name\", \"$phone\", \"$email\", \"$profile_picture\", \"$gender\") ");
+
+					if($query){
+						return WEB::respond(true, '', array('id'=>$conn->insert_id));
+					}else{
+						$error = 'Error: '.$conn->error;
+					}
+				}else{
+					$error = 'Phone number is used by someone else';
+				}
 			}else{
-				return WEB::respond(false, 'Error: '.$conn->error);
-			}			
+				$error = "Email is already used";
+			}
+
+			//Correct response was not sent we send this
+			return WEB::respond(false, $error);		
+		}
+
+		public function userEmail($email){
+			//finds user with email
+			global $conn;
+			$query = $conn->query("SELECT * FROM users WHERE email = \"$email\" ");
+			if($query && $query->num_rows){
+				$data = $query->fetch_assoc();
+				return $data['id'];
+			}else{
+				return false;
+			}
+		}
+
+		public function userPhone($phone){
+			//finds user with phone
+			global $conn;
+			$query = $conn->query("SELECT * FROM users WHERE phone = \"$phone\" ");
+			if($query && $query->num_rows){
+				$data = $query->fetch_assoc();
+				return $data['id'];
+			}else{
+				return false;
+			}
 		}
 
 

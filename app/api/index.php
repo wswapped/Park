@@ -153,6 +153,37 @@ if($action == 'carEntry'){
 		//somethng was wrong
 		$response = WEB::response(false, 'Form was not filled well. Please check if all fields are filled and with correct values');
 	}
+}else if($action == 'addParkingCategory'){
+	//Adding parking category
+	$name = $request['name']??"";
+	$description = $request['description']??"";
+	$parking = $request['parking']??"";
+	$userId = $request['userId']??"";
+
+	$fees = $request['fees'];
+
+	//check if all parking category essentials were set
+	if($name && $description && $parking && $userId){
+		//here we can add the category
+		$catStatus = $Parking->addCategory($parking, $name, $description, $userId);
+		if($catStatus->status){
+			//category created successfully
+			//lets check if the fees were also specified
+			if(!empty($fees)){
+				$categoryId = $catStatus->data;
+				//lets add money
+				foreach ($fees as $duration => $fee) {
+					$Parking->addCategoryFee($categoryId, $duration, $fee, $userId);
+				}
+			}
+			$response = WEB::respond(true);
+		}else{
+			$response = WEB::respond(false, $catStatus->msg);
+		}
+	}else{
+		//somethng was wrong
+		$response = WEB::respond(false, 'Form was not filled well. Please check if all fields are filled and with correct values');
+	}
 }
 else{
 	$response = array('status'=>false, 'msg'=>"Specifiy action");
