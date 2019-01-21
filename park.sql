@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.4
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Oct 27, 2018 at 07:35 PM
--- Server version: 10.1.28-MariaDB
--- PHP Version: 7.1.11
+-- Host: 127.0.0.1
+-- Generation Time: Jan 21, 2019 at 01:34 PM
+-- Server version: 10.1.37-MariaDB
+-- PHP Version: 7.3.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -1330,7 +1330,9 @@ INSERT INTO `movement` (`id`, `car`, `type`, `parking`, `camera`, `time`) VALUES
 (1826, 'RAC293Y', 'entry', 1, 1, '2018-10-06 12:44:57'),
 (1827, 'RAC293Y', 'entry', 1, 1, '2018-10-06 12:44:58'),
 (1828, 'RAC293V', 'entry', 1, 1, '2018-10-06 12:44:59'),
-(1829, 'RAC293Y', 'entry', 1, 1, '2018-10-06 12:45:01');
+(1829, 'RAC293Y', 'entry', 1, 1, '2018-10-06 12:45:01'),
+(1830, '', 'entry', 0, 0, '2018-10-29 06:19:24'),
+(1831, '', 'entry', 0, 0, '2018-10-29 06:20:32');
 
 -- --------------------------------------------------------
 
@@ -1344,15 +1346,16 @@ CREATE TABLE `parking` (
   `location` varchar(128) NOT NULL COMMENT 'Textual location of text',
   `lat` double NOT NULL,
   `lng` double NOT NULL COMMENT 'longitude location',
-  `addedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `addedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `archived` enum('no','yes') NOT NULL DEFAULT 'no'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `parking`
 --
 
-INSERT INTO `parking` (`id`, `name`, `location`, `lat`, `lng`, `addedDate`) VALUES
-(1, 'Telecom House Parking', '8 KG 7 Ave, Kigali', -1.954704, 30.103006, '2018-09-25 10:23:29');
+INSERT INTO `parking` (`id`, `name`, `location`, `lat`, `lng`, `addedDate`, `archived`) VALUES
+(1, 'Telecom House Parking', '8 KG 7 Ave, Kigali', -1.954704, 30.103006, '2018-09-25 10:23:29', 'no');
 
 -- --------------------------------------------------------
 
@@ -1362,9 +1365,8 @@ INSERT INTO `parking` (`id`, `name`, `location`, `lat`, `lng`, `addedDate`) VALU
 
 CREATE TABLE `parking_roles` (
   `id` int(11) NOT NULL,
+  `systemRole` int(11) NOT NULL COMMENT 'Link to the system role',
   `parking` int(11) NOT NULL,
-  `user` int(11) NOT NULL,
-  `role` varchar(16) NOT NULL,
   `createdDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createdBy` int(11) NOT NULL,
   `updatedBy` int(11) DEFAULT NULL,
@@ -1372,14 +1374,14 @@ CREATE TABLE `parking_roles` (
   `archived` enum('no','yes') NOT NULL DEFAULT 'no',
   `archivedDate` timestamp NULL DEFAULT NULL,
   `archivedBy` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Relate system role to parking specifically';
 
 --
 -- Dumping data for table `parking_roles`
 --
 
-INSERT INTO `parking_roles` (`id`, `parking`, `user`, `role`, `createdDate`, `createdBy`, `updatedBy`, `updatedDate`, `archived`, `archivedDate`, `archivedBy`) VALUES
-(1, 1, 1, 'admin', '2018-09-25 11:16:17', 0, NULL, NULL, 'no', NULL, NULL);
+INSERT INTO `parking_roles` (`id`, `systemRole`, `parking`, `createdDate`, `createdBy`, `updatedBy`, `updatedDate`, `archived`, `archivedDate`, `archivedBy`) VALUES
+(16, 2, 1, '2018-10-29 10:46:54', 0, NULL, NULL, 'no', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1459,7 +1461,17 @@ CREATE TABLE `system_roles` (
 --
 
 INSERT INTO `system_roles` (`id`, `user`, `role`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`, `archived`, `archievedDate`, `archivedBy`) VALUES
-(2, 1, 'parkingAdmin', '2018-09-28 05:38:40', 1, NULL, NULL, 'no', NULL, NULL);
+(2, 1, 'parkingAdmin', '2018-09-28 05:38:40', 1, NULL, NULL, 'no', NULL, NULL),
+(3, 9, 'parkingAdmin', '2018-10-29 07:17:32', 0, NULL, NULL, 'no', NULL, NULL),
+(4, 10, 'parkingAdmin', '2018-10-29 07:18:11', 0, NULL, NULL, 'no', NULL, NULL),
+(5, 11, 'parkingAdmin', '2018-10-29 07:56:33', 0, NULL, NULL, 'no', NULL, NULL),
+(6, 12, 'parkingAgent', '2018-10-29 07:57:57', 0, NULL, NULL, 'no', NULL, NULL),
+(7, 13, 'parkingAdmin', '2018-10-29 08:02:05', 0, NULL, NULL, 'no', NULL, NULL),
+(8, 14, 'parkingAdmin', '2018-10-29 08:03:44', 0, NULL, NULL, 'no', NULL, NULL),
+(9, 15, 'parkingAdmin', '2018-10-29 08:05:12', 0, NULL, NULL, 'no', NULL, NULL),
+(10, 16, 'parkingAdmin', '2018-10-29 08:05:26', 0, NULL, NULL, 'no', NULL, NULL),
+(11, 17, 'parkingAdmin', '2018-10-29 08:06:08', 0, NULL, NULL, 'no', NULL, NULL),
+(12, 18, 'parkingAdmin', '2018-10-29 08:07:56', 0, NULL, NULL, 'no', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1490,6 +1502,7 @@ CREATE TABLE `users` (
   `email` varchar(1024) NOT NULL,
   `phoneNumber` varchar(15) NOT NULL,
   `profilePicture` varchar(1024) NOT NULL,
+  `gender` enum('m','f') NOT NULL,
   `password` varchar(1024) NOT NULL,
   `createdDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `createdBy` int(11) NOT NULL,
@@ -1504,8 +1517,25 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `phoneNumber`, `profilePicture`, `password`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`, `archived`, `archievedDate`, `archivedBy`) VALUES
-(1, 'Placide', 'placidelunis@gmail.com', '+250784762982', 'assets/img/users/default.jpg', 'placide', '2018-09-25 11:15:02', 1, NULL, NULL, 'no', NULL, NULL);
+INSERT INTO `users` (`id`, `name`, `email`, `phoneNumber`, `profilePicture`, `gender`, `password`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`, `archived`, `archievedDate`, `archivedBy`) VALUES
+(1, 'Placide', 'placidelunis@gmail.com', '+250784762982', 'assets/img/users/default.jpg', 'm', 'placide', '2018-09-25 11:15:02', 1, NULL, NULL, 'no', NULL, NULL),
+(2, 'Placide', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 06:22:19', 0, NULL, NULL, 'no', NULL, NULL),
+(3, 'Placide', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 07:15:26', 0, NULL, NULL, 'no', NULL, NULL),
+(4, 'Placide', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 07:15:42', 0, NULL, NULL, 'no', NULL, NULL),
+(5, 'Placide', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 07:16:04', 0, NULL, NULL, 'no', NULL, NULL),
+(6, 'Placide', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 07:16:22', 0, NULL, NULL, 'no', NULL, NULL),
+(7, 'Placide', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 07:16:51', 0, NULL, NULL, 'no', NULL, NULL),
+(8, 'Placide', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 07:17:05', 0, NULL, NULL, 'no', NULL, NULL),
+(9, 'Placide', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 07:17:32', 0, NULL, NULL, 'no', NULL, NULL),
+(10, 'Placide', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 07:18:11', 0, NULL, NULL, 'no', NULL, NULL),
+(11, 'Paci', 'paci@gmail.com', '0786601003', '', 'm', '', '2018-10-29 07:56:33', 0, NULL, NULL, 'no', NULL, NULL),
+(12, 'Ummuti', 'okp@gmail.com', '544454555', '', 'm', '', '2018-10-29 07:57:57', 0, NULL, NULL, 'no', NULL, NULL),
+(13, 'Karangwa ', 'karanag@gmail.com', '', '', 'm', '', '2018-10-29 08:02:04', 0, NULL, NULL, 'no', NULL, NULL),
+(14, 'CLement', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 08:03:44', 0, NULL, NULL, 'no', NULL, NULL),
+(15, 'CLement', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 08:05:12', 0, NULL, NULL, 'no', NULL, NULL),
+(16, 'CLement', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 08:05:26', 0, NULL, NULL, 'no', NULL, NULL),
+(17, 'CLement', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 08:06:08', 0, NULL, NULL, 'no', NULL, NULL),
+(18, 'CLement', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 08:07:56', 0, NULL, NULL, 'no', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -1529,7 +1559,7 @@ ALTER TABLE `parking`
 ALTER TABLE `parking_roles`
   ADD PRIMARY KEY (`id`),
   ADD KEY `role-parking` (`parking`),
-  ADD KEY `role-user` (`user`);
+  ADD KEY `parking-systemrole` (`systemRole`);
 
 --
 -- Indexes for table `parking_zones`
@@ -1571,7 +1601,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `movement`
 --
 ALTER TABLE `movement`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1830;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1832;
 
 --
 -- AUTO_INCREMENT for table `parking`
@@ -1583,7 +1613,7 @@ ALTER TABLE `parking`
 -- AUTO_INCREMENT for table `parking_roles`
 --
 ALTER TABLE `parking_roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `parking_zones`
@@ -1595,7 +1625,7 @@ ALTER TABLE `parking_zones`
 -- AUTO_INCREMENT for table `system_roles`
 --
 ALTER TABLE `system_roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `templatetable`
@@ -1607,7 +1637,7 @@ ALTER TABLE `templatetable`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- Constraints for dumped tables
@@ -1617,8 +1647,8 @@ ALTER TABLE `users`
 -- Constraints for table `parking_roles`
 --
 ALTER TABLE `parking_roles`
-  ADD CONSTRAINT `role-parking` FOREIGN KEY (`parking`) REFERENCES `parking` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `role-user` FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `parking-systemrole` FOREIGN KEY (`systemRole`) REFERENCES `system_roles` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `role-parking` FOREIGN KEY (`parking`) REFERENCES `parking` (`id`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `parking_zones`
