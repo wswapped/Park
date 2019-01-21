@@ -106,7 +106,7 @@
 											<?php
 										}
 									}else{
-										echo $categories['msg'];
+										echo $categories->msg;
 									}
 
 								}
