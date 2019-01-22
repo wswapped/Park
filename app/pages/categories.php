@@ -6,7 +6,13 @@
 					<h4 class="card-title"> Categories</h4>		
 					<?php
 						//Parking ID
-						$parkingId = $_GET['pid']??''; ?>		
+						$parkingId = $_GET['pid']??'';
+
+						//if parking is not set, go ack and choose parking
+						if(!$parkingId)
+							header("location:parking");
+
+					?>		
 				</div>
 				<div class="card-body">
 					<div class="toolbar">
