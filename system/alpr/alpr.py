@@ -6,9 +6,11 @@ def findPlates(imagePath):
 	#interacts with openalpr command line utility
 
 	if(os.path.isfile(imagePath)):
-		p1 = subprocess.Popen(["alpr/alpr", imagePath, '-c rw', '-j'], cwd= os.getcwd(), stdout=subprocess.PIPE)
+		p1 = subprocess.Popen(["alpr", imagePath, '-c rw', '-j'], cwd= os.getcwd(), stdout=subprocess.PIPE)
 		# Run the command
-		output = p1.communicate()[0]
+		commandReturn = p1.communicate()
+		# print(commandReturn)
+		output = commandReturn[0]
 		return output;
 	else:
 		print("Error: image file can not be found")

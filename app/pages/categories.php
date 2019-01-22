@@ -6,7 +6,7 @@
 					<h4 class="card-title"> Categories</h4>		
 					<?php
 						//Parking ID
-						$parkingId = $_GET['pid']; ?>		
+						$parkingId = $_GET['pid']??''; ?>		
 				</div>
 				<div class="card-body">
 					<div class="toolbar">
@@ -106,7 +106,7 @@
 											<?php
 										}
 									}else{
-										echo $categories->msg;
+										echo $categories['msg'];
 									}
 
 								}

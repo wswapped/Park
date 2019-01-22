@@ -26,8 +26,18 @@ def recognize(queue=None, frame=None):
 			# pr.disable()
 			# pr.print_stats(sort='time')
 			# continue
-
 			plateText = alpr.findPlates(frameFile)
+
+			# convert to string
+			plateText = str(plateText, 'utf-8')
+
+			print(plateText, "here")
+
+			if len(plateText) < 1:
+				# error occured
+				print("No text")
+				return False
+
 			# Parsing the plate text
 			plates = json.loads(plateText)
 
@@ -54,7 +64,7 @@ def recognize(queue=None, frame=None):
 
 			if detectedPlate:
 				print("movement"+movementType)
-				serverInst = server('http://localhost', 'smartpark/api/index.php')
+				serverInst = server('http://www.park.rw', 'api/index.php')
 
 				if(movementType == 'entry'):
 					data = serverInst.enterCar(detectedPlate['plate'], 1, 1)
