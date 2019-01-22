@@ -31,12 +31,9 @@ def recognize(queue=None, frame=None):
 			# convert to string
 			plateText = str(plateText, 'utf-8')
 
-			print(plateText, "here")
-
 			if len(plateText) < 1:
 				# error occured
-				print("No text")
-				return False
+				print("No text");
 
 			# Parsing the plate text
 			plates = json.loads(plateText)

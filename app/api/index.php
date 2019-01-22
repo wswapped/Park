@@ -33,14 +33,35 @@ if($action == 'carEntry'){
 	$parkId = $request['parkId']??"";
 	$cameraId = $request['cameraId']??"";
 
-	//marking the entry of a car
-	$query = $conn->query("INSERT INTO `movement` (`car`, `type`, `parking`, `camera`, `time`) VALUES (\"$carPlate\", 'entry', \"$parkId\", \"$cameraId\", CURRENT_TIMESTAMP)");
-	if($query){
-		//check if the user has some money
-		$response = form_response(true);
-	}else{
-		$response = form_response(false, 'DB error '.$conn->error);
+	//check if the car has entered in less than a minute ago
+	$lastMovement = $Movement->lastMovement($carPlate);
+	if($lastMovement->status){
+		$movement = $lastMovement->data;
+
+		$time = strtotime($movement['time']);
+		$interval = (time() - $time)/60;
+
+		if(abs($interval) < 1){
+			//here user need to wait for a minute
+			$timeConstraint = 1;
+		}
 	}
+
+	//check time constraint
+	if(!empty($timeConstraint) && $timeConstraint){
+		//marking the entry of a car
+		$query = $conn->query("INSERT INTO `movement` (`car`, `type`, `parking`, `camera`, `time`) VALUES (\"$carPlate\", 'entry', \"$parkId\", \"$cameraId\", CURRENT_TIMESTAMP)");
+		if($query){
+			//check if the user has some money
+			$response = form_response(true);
+		}else{
+			$response = form_response(false, 'DB error '.$conn->error);
+		}
+	}else{
+		$response = form_response(false, 'You moved very recently, just '.abs($interval));
+	}
+
+	
 }else if($action == 'carExit'){
 	//Mark the exit of the car
 	$carPlate = $request['carPlate']??"";

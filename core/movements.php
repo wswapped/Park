@@ -60,7 +60,20 @@
 			//returns the last movement of the car
 			global $conn;
 
-			$query = $conn->query("SELECT * FROM movements  ");
+			$query = $conn->query("SELECT * FROM movement WHERE car = \"$plate\" AND type LIKE \"%$type%\" ");
+			if($query){
+				//check is there is record
+				if($query->num_rows){
+					$data = $query->fetch_assoc();
+
+					return WEB::respond(true, "", $data);
+				}else{
+					return WEB::respond(false, "No movement found");
+				}
+			}else{
+				//maybe there was an error
+				return WEB::respond(false, "Error $conn->error");
+			}
 		}
 
 		public function getTypeUsers($type){
