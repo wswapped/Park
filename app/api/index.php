@@ -68,14 +68,34 @@ if($action == 'carEntry'){
 	$parkId = $request['parkId']??"";
 	$cameraId = $request['cameraId']??"";
 
-	//check if the entry time
-	// $c = $conn->query("SELECT * FROM movement WHERE car = \"$carPlate\" AND parkId = \'\' ")
+	$fees = 0;
+
+	//check when the car has entered
+	$lastMovement = $Movement->lastMovement($carPlate);
+	if($lastMovement->status){
+		$movement = $lastMovement->data;
+
+		$time = strtotime($movement['time']);
+		$interval = (time() - $time)/60;
+
+		//start the payment
+		if($interval < 15){
+			//
+			$fees = 0;
+		}else if($interval <= 60){
+			$fees = 200;
+		}elseif($interval <= 120){
+			$fees = 300;
+		}else{
+			$fees = 400;
+		}
+	}
 
 	//marking the exit of a car
 	$query = $conn->query("INSERT INTO `movement` (`car`, `type`, `parking`, `camera`, `time`) VALUES (\"$carPlate\", 'exit', \"$parkId\", \"$cameraId\", CURRENT_TIMESTAMP)");
 	if($query){
 		//check if the user has some money
-		$response = form_response(true);
+		$response = form_response(true, "", array('fees'=>$fees));
 	}else{
 		$response = form_response(false, 'DB error '.$conn->error);
 	}
