@@ -154,9 +154,6 @@
 				return WEB::respond(false, "Error adding category duration fee $conn->error");
 			}
 		}
-
-
-
 	}
 
 	$Parking = new parking();
