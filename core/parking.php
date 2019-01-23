@@ -145,7 +145,7 @@
 		public function addCategoryFee($categoryId, $duration, $fee, $userId){
 			//adds the parking category in the database
 			global $conn;
-			$sql = "INSERT INTO categoryFees($categoryId, duration, fee, createdBy) VALUES(\"$categoryId\", \"$duration\", \"$fee\", \"$userId\")";
+			$sql = "INSERT INTO category_fees(category, duration, fee, createdBy) VALUES(\"$categoryId\", \"$duration\", \"$fee\", \"$userId\")";
 			$query = $conn->query($sql);
 			if($query){
 				return WEB::respond(true, $conn->insert_id);

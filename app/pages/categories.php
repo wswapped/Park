@@ -95,7 +95,6 @@
 
 									if($categories->status){
 										$categories = $categories->data;
-										var_dump($categories);
 										foreach ($categories as $key => $category) {
 											$categoryId = $category['id'];
 											$pricing = "";

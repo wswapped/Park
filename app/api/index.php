@@ -212,6 +212,7 @@ if($action == 'carEntry'){
 			//lets check if the fees were also specified
 			if(!empty($fees)){
 				$categoryId = $catStatus->data;
+				
 				//lets add money
 				foreach ($fees as $duration => $fee) {
 					$Parking->addCategoryFee($categoryId, $duration, $fee, $userId);
