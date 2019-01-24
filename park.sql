@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 23, 2019 at 10:47 AM
+-- Generation Time: Jan 24, 2019 at 05:23 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.0
 
@@ -33,6 +33,7 @@ CREATE TABLE `categories` (
   `name` varchar(1024) NOT NULL,
   `description` varchar(4096) NOT NULL,
   `parking` int(11) NOT NULL COMMENT 'The parking where this category belongs',
+  `isDefault` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'default parking category?',
   `createdDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `createdBy` int(11) NOT NULL,
   `updatedDate` timestamp NULL DEFAULT NULL,
@@ -46,9 +47,9 @@ CREATE TABLE `categories` (
 -- Dumping data for table `categories`
 --
 
-INSERT INTO `categories` (`id`, `name`, `description`, `parking`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`, `archived`, `archievedDate`, `archivedBy`) VALUES
-(1, 'Normal', 'Normal parking users', 1, '2019-01-23 09:38:17', 1, NULL, NULL, 'no', NULL, NULL),
-(2, 'Normal', 'Normal parking users', 1, '2019-01-23 09:46:24', 1, NULL, NULL, 'no', NULL, NULL);
+INSERT INTO `categories` (`id`, `name`, `description`, `parking`, `isDefault`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`, `archived`, `archievedDate`, `archivedBy`) VALUES
+(1, 'Normal', 'Normal parking users', 1, 0, '2019-01-23 09:38:17', 1, NULL, NULL, 'no', NULL, NULL),
+(2, 'Normal', 'Normal parking users', 1, 0, '2019-01-23 09:46:24', 1, NULL, NULL, 'no', NULL, NULL);
 
 -- --------------------------------------------------------
 
