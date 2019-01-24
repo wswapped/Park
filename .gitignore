@@ -4,3 +4,4 @@ system/deep-anpr/weights.npz
 system/alpr/samples/current.jpg
 system/alpr/__pycache__
 *.DS_Store
+sds.pdf
