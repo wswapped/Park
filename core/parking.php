@@ -123,7 +123,41 @@
 
 			$query = $conn->query("SELECT * FROM categories where parking = \"$parkingId\" ");
 			if($query){
-				return WEB::respond(true, '', $query->fetch_all(MYSQLI_ASSOC));
+				$data = $query->fetch_all(MYSQLI_ASSOC);
+
+				return WEB::respond(true, '', $data);
+			}else{
+				return WEB::respond(false, "There was a database error $conn->error");
+			}
+		}
+
+		public function getCategory($categoryId)
+		{
+			# Details on the category
+			global $conn;
+
+			$query = $conn->query("SELECT * FROM categories where id = \"$categoryId\" AND archived = 'no' ");
+			if($query){
+				$data = $query->fetch_assoc(); 
+
+				//get the fees
+				$fees = $this->categoryFees($categoryId);
+				$data['fees'] = $fees;
+				return WEB::respond(true, '', $data);
+			}else{
+				return WEB::respond(false, "There was a database error $conn->error");
+			}
+		}
+
+		public function getCategoryMembers($categoryId)
+		{
+			# Details on the category
+			global $conn;
+
+			$query = $conn->query("SELECT * FROM categories WHERE id = \"$categoryId\" AND archived = 'no' ");
+			if($query){
+				$data = $query->fetch_assoc();
+				return WEB::respond(true, '', $data);
 			}else{
 				return WEB::respond(false, "There was a database error $conn->error");
 			}
@@ -139,6 +173,18 @@
 			}else{
 				//query has failed
 				return WEB::respond(false, "Error creating category $conn->error");
+			}
+		}
+
+		public function categoryFees($categoryId){
+			//returns the duration fee
+			global $conn;
+
+			$query = $conn->query("SELECT * FROM category_fees WHERE category = \"$categoryId\" ");
+			if($query){
+				return WEB::respond(true, '', $query->fetch_all(MYSQLI_ASSOC));
+			}else{
+				return WEB::respond(false, "Error: $conn->error");
 			}
 		}
 

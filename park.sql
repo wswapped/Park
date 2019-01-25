@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 24, 2019 at 05:23 PM
+-- Generation Time: Jan 25, 2019 at 12:59 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.0
 
@@ -21,6 +21,24 @@ SET time_zone = "+00:00";
 --
 -- Database: `park`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cars`
+--
+
+CREATE TABLE `cars` (
+  `id` int(11) NOT NULL,
+  `plate` varchar(20) NOT NULL,
+  `createdDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdBy` int(11) NOT NULL,
+  `updatedDate` timestamp NULL DEFAULT NULL,
+  `updatedBy` int(11) DEFAULT NULL,
+  `archived` enum('no','yes') NOT NULL DEFAULT 'no',
+  `archievedDate` timestamp NULL DEFAULT NULL,
+  `archivedBy` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Keep cars';
 
 -- --------------------------------------------------------
 
@@ -79,6 +97,25 @@ INSERT INTO `category_fees` (`id`, `category`, `duration`, `fee`, `createdDate`,
 (1, 2, 0, 300, '2019-01-23 09:46:24', 1, NULL, NULL, 'no', NULL, NULL),
 (2, 2, 60, 100, '2019-01-23 09:46:24', 1, NULL, NULL, 'no', NULL, NULL),
 (3, 2, 180, 200, '2019-01-23 09:46:24', 1, NULL, NULL, 'no', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `category_users`
+--
+
+CREATE TABLE `category_users` (
+  `id` int(11) NOT NULL,
+  `car` int(11) NOT NULL COMMENT 'key to the car',
+  `expiryDate` timestamp NULL DEFAULT NULL COMMENT 'Date until which user can access with this category',
+  `createdDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdBy` int(11) NOT NULL,
+  `updatedDate` timestamp NULL DEFAULT NULL,
+  `updatedBy` int(11) DEFAULT NULL,
+  `archived` enum('no','yes') NOT NULL DEFAULT 'no',
+  `archievedDate` timestamp NULL DEFAULT NULL,
+  `archivedBy` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Users of the category';
 
 -- --------------------------------------------------------
 
@@ -1595,28 +1632,17 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `phoneNumber`, `profilePicture`, `gender`, `password`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`, `archived`, `archievedDate`, `archivedBy`) VALUES
-(1, 'Placide', 'placidelunis@gmail.com', '+250784762982', 'assets/img/users/default.jpg', 'm', 'placide', '2018-09-25 11:15:02', 1, NULL, NULL, 'no', NULL, NULL),
-(2, 'Placide', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 06:22:19', 0, NULL, NULL, 'no', NULL, NULL),
-(3, 'Placide', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 07:15:26', 0, NULL, NULL, 'no', NULL, NULL),
-(4, 'Placide', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 07:15:42', 0, NULL, NULL, 'no', NULL, NULL),
-(5, 'Placide', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 07:16:04', 0, NULL, NULL, 'no', NULL, NULL),
-(6, 'Placide', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 07:16:22', 0, NULL, NULL, 'no', NULL, NULL),
-(7, 'Placide', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 07:16:51', 0, NULL, NULL, 'no', NULL, NULL),
-(8, 'Placide', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 07:17:05', 0, NULL, NULL, 'no', NULL, NULL),
-(9, 'Placide', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 07:17:32', 0, NULL, NULL, 'no', NULL, NULL),
-(10, 'Placide', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 07:18:11', 0, NULL, NULL, 'no', NULL, NULL),
-(11, 'Paci', 'paci@gmail.com', '0786601003', '', 'm', '', '2018-10-29 07:56:33', 0, NULL, NULL, 'no', NULL, NULL),
-(12, 'Ummuti', 'okp@gmail.com', '544454555', '', 'm', '', '2018-10-29 07:57:57', 0, NULL, NULL, 'no', NULL, NULL),
-(13, 'Karangwa ', 'karanag@gmail.com', '', '', 'm', '', '2018-10-29 08:02:04', 0, NULL, NULL, 'no', NULL, NULL),
-(14, 'CLement', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 08:03:44', 0, NULL, NULL, 'no', NULL, NULL),
-(15, 'CLement', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 08:05:12', 0, NULL, NULL, 'no', NULL, NULL),
-(16, 'CLement', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 08:05:26', 0, NULL, NULL, 'no', NULL, NULL),
-(17, 'CLement', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 08:06:08', 0, NULL, NULL, 'no', NULL, NULL),
-(18, 'CLement', 'placidelunis@gmail.com', '0786601003', '', 'm', '', '2018-10-29 08:07:56', 0, NULL, NULL, 'no', NULL, NULL);
+(1, 'Placide', 'placidelunis@gmail.com', '+250784762982', 'assets/img/users/default.jpg', 'm', 'placide', '2018-09-25 11:15:02', 1, NULL, NULL, 'no', NULL, NULL);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `cars`
+--
+ALTER TABLE `cars`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `categories`
@@ -1628,6 +1654,12 @@ ALTER TABLE `categories`
 -- Indexes for table `category_fees`
 --
 ALTER TABLE `category_fees`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `category_users`
+--
+ALTER TABLE `category_users`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1687,6 +1719,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `cars`
+--
+ALTER TABLE `cars`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
@@ -1697,6 +1735,12 @@ ALTER TABLE `categories`
 --
 ALTER TABLE `category_fees`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `category_users`
+--
+ALTER TABLE `category_users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `movement`
@@ -1738,7 +1782,7 @@ ALTER TABLE `templatetable`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
