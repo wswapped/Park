@@ -61,6 +61,10 @@
 			}
 		}
 
+		public function getCarId($plate){
+			
+		}
+
 		public function getTypeUsers($type){
 			//finds the types of the user
 			global $conn;
@@ -155,6 +159,23 @@
 			global $conn;
 
 			$query = $conn->query("SELECT * FROM categories WHERE id = \"$categoryId\" AND archived = 'no' ");
+			if($query){
+				$data = $query->fetch_assoc();
+				return WEB::respond(true, '', $data);
+			}else{
+				return WEB::respond(false, "There was a database error $conn->error");
+			}
+		}
+
+		public function addCategoryMembers($plate, $expiryDate, $categoryId, $userId)
+		{
+			# Add member to the category
+			global $conn;
+
+			//CHECK IF the car is available
+			$
+
+			$query = $conn->query("INSERT INTO category_users(car, expiryDate, category, createdBy) VALUES(\"\") AND archived = 'no' ");
 			if($query){
 				$data = $query->fetch_assoc();
 				return WEB::respond(true, '', $data);

@@ -254,7 +254,7 @@
 							<div class="modal fade" id="addCategoryMember" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 								<div class="modal-dialog" role="document">
 									<div class="modal-content">
-										<form id='addParkingCategory'>
+										<form id='addCategoryMemberForm'>
 											<div class="modal-header">
 												<h5 class="modal-title" id="exampleModalLabel">New category member</h5>
 												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -262,39 +262,25 @@
 												</button>
 											</div>
 											<div class="modal-body">
-												<div id="feedBack"></div> 										
+												<div class="feedBack"></div> 										
 												<div class="form-group">
 													<label for="nameInput">Plate</label>
-													<input type="text" class="form-control" id="nameInput" aria-describedby="emailHelp" placeholder="Enter Plate number">
+													<input type="text" class="form-control" id="carPlateInput" aria-describedby="emailHelp" placeholder="Enter Plate number">
 												</div>
 												<div class="form-group">
 													<label for="descriptionInput">Expiry date</label>
-													<input type="text" class="form-control datetimepicker" id="descriptionInput" placeholder="Date the user should use category" value="<?php echo date(STANDARD_DATETIME_FORMAT, time()+(3600*24)) ?>">
+													<input type="text" class="form-control datetimepicker" id="expiryDateInput" placeholder="Date the user should use category" value="<?php echo date(STANDARD_DATETIME_FORMAT, time()+(3600*24)) ?>">
 												</div>
 												<!-- <div class="form-group">
 													<label for="descriptionInput">Description</label>
 													<input type="text" class="form-control" id="descriptionInput" aria-describedby="emailHelp" placeholder="Describe this category">
 												</div>
 												 -->
-												<div class="mt-5">Category charges</div>
-												<hr />
-												<div class="form-group">
-													<label for="chargeslhInput">Less than hour</label>
-													<input type="number" class="form-control" id="chargeslhInput" aria-describedby="emailHelp" min="100" placeholder="Charges in FRW">
-												</div>
-												<div class="form-group">
-													<label for="descriptionInput">Less than 3 hours</label>
-													<input type="number" class="form-control" id="chargesl3hInput" aria-describedby="emailHelp" placeholder="Charges in FRW" min="100">
-												</div>
-												<div class="form-group">
-													<label for="descriptionInput">More than 3 hours</label>
-													<input type="number" class="form-control" id="chargesm3hInput" aria-describedby="emailHelp" placeholder="Charges in FRW" min="100">
-												</div>
 											</div>
 											<input type="hidden" name="pid" id="PID" value="<?php echo $parkingId ?>">
 											<div class="modal-footer">
 												<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-												<button type="submit" class="btn btn-primary">Create</button>
+												<button type="submit" class="btn btn-primary">Add</button>
 											</div>
 										</form>
 									</div>
@@ -364,6 +350,9 @@
 
 	</div>
 </div>
+<script type="text/javascript">
+	const currentCategoryId = <?=$categoryId?>;
+</script>
 <?php
 	$jsFiles = array_merge($jsFiles, array('assets/js/plugins/bootstrap-datetimepicker.js', 'assets/js/viewCategory.js'));
 ?>
