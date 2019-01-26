@@ -27,6 +27,7 @@
 	define('DB_DATE_FORMAT', 'Y-m-d H:i:s');
 	define('STANDARD_DATE_FORMAT', 'd-m-Y');
 	define('STANDARD_TIME_FORMAT', 'd-m-Y h:i:s');
+	define('STANDARD_DATETIME_FORMAT', 'd-m-Y h:i:s');
 	define('STANDARD_TIMETEXT_FORMAT', 'd M Y h:i:s');
 	define('PROJECT_NAME', 'ParkSmart');
 

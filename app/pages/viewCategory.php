@@ -3,7 +3,6 @@
 		<div class="col-md-12">
 			<div class="card">                
 				<div class="card-header">
-						
 					<?php
 						//Page should be loaded with category
 						if(!$categoryId){
@@ -52,7 +51,6 @@
 						</div>
 					</div>
 					<div class="toolbar">
-
 						<?php
 							if($User->can($currentUserId, 'addUser')){
 						?>
@@ -121,7 +119,6 @@
 				</div>
 				<div class="card-body">
 					<div class="toolbar">
-
 						<?php
 							if($User->can($currentUserId, 'addUser')){
 						?>
@@ -249,17 +246,17 @@
 					<div class="toolbar">
 
 						<?php
-							if($User->can($currentUserId, 'addUser')){
+							if($User->can($currentUserId, 'addCategoryMember')){
 						?>
 							<!--Here you can write extra buttons/actions for the toolbar-->
-							<button class="btn btn-info" data-toggle="modal" data-target="#addUser"><i class="now-ui-icons ui-1_simple-add"></i> Add</button>
+							<button class="btn btn-info" data-toggle="modal" data-target="#addCategoryMember"><i class="now-ui-icons ui-1_simple-add"></i> Add</button>
 							<!-- Modal -->
-							<div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal fade" id="addCategoryMember" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 								<div class="modal-dialog" role="document">
 									<div class="modal-content">
 										<form id='addParkingCategory'>
 											<div class="modal-header">
-												<h5 class="modal-title" id="exampleModalLabel">New parking category</h5>
+												<h5 class="modal-title" id="exampleModalLabel">New category member</h5>
 												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 													<span aria-hidden="true">&times;</span>
 												</button>
@@ -267,14 +264,18 @@
 											<div class="modal-body">
 												<div id="feedBack"></div> 										
 												<div class="form-group">
-													<label for="nameInput">Name</label>
-													<input type="text" class="form-control" id="nameInput" aria-describedby="emailHelp" placeholder="Category name">
+													<label for="nameInput">Plate</label>
+													<input type="text" class="form-control" id="nameInput" aria-describedby="emailHelp" placeholder="Enter Plate number">
 												</div>
 												<div class="form-group">
+													<label for="descriptionInput">Expiry date</label>
+													<input type="text" class="form-control datetimepicker" id="descriptionInput" placeholder="Date the user should use category" value="<?php echo date(STANDARD_DATETIME_FORMAT, time()+(3600*24)) ?>">
+												</div>
+												<!-- <div class="form-group">
 													<label for="descriptionInput">Description</label>
 													<input type="text" class="form-control" id="descriptionInput" aria-describedby="emailHelp" placeholder="Describe this category">
 												</div>
-												
+												 -->
 												<div class="mt-5">Category charges</div>
 												<hr />
 												<div class="form-group">
@@ -364,5 +365,5 @@
 	</div>
 </div>
 <?php
-	$jsFiles = array_merge($jsFiles, array('assets/js/parkingCategories.js'));
+	$jsFiles = array_merge($jsFiles, array('assets/js/plugins/bootstrap-datetimepicker.js', 'assets/js/viewCategory.js'));
 ?>

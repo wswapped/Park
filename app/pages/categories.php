@@ -141,5 +141,3 @@
 				$jsFiles = array_merge($jsFiles, array('assets/js/parkingCategories.js'));
 	}
 ?>
-
-0
