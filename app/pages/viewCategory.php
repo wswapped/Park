@@ -22,9 +22,9 @@
 						//uSERS of the category
 						$catUsers = $Parking->getCategoryMembers($categoryId);
 
-						$catUserData = $catUsers->data;
+						$catUsersData = $catUsers->data;
 						$catUsersNum = 0;
-						if(is_array($catUsersNum)){
+						if(is_array($catUsersData)){
 							$catUsersNum = count($catUsersData);
 						}
 
@@ -313,12 +313,12 @@
 										</tfoot>
 										<tbody>
 											<?php
-												foreach ($feesData as $key => $plan) {
-													$pricing = "";
+												foreach ($catUsersData as $key => $user) {
+													$plateData = $Parking->carPlate($user['car']);
 													?>
 														<tr>
-															<td><?php echo $plan['duration']; ?></td>
-															<td><?php echo  $plan['fee'] ?></td>
+															<td><?php echo $plateData->status?$plateData->data:$plateData->msg; ?></td>
+															<td><?php echo  $user['expiryDate'] ?></td>
 															<td><?php echo 0 ?></td>
 															<td class="text-right">
 																<a href="?cid=<?=$categoryId?>" class="btn btn-round btn-info btn-icon btn-sm like"><i class="fas fa-angle-right"></i></a>

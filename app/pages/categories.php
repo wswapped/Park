@@ -6,6 +6,14 @@
 	if(!empty($categoryId)){
 		include_once "viewCategory.php";
 	}else{
+		//uSERS of the category
+		$catUsers = $Parking->getCategoryMembers($categoryId);
+
+		$catUsersData = $catUsers->data;
+		$catUsersNum = 0;
+		if(is_array($catUsersData)){
+			$catUsersNum = count($catUsersData);
+		}
 		?>
 			<div class="content">
 				<div class="row">
@@ -110,10 +118,20 @@
 													foreach ($categories as $key => $category) {
 														$categoryId = $category['id'];
 														$pricing = "";
+
+														//uSERS of the category
+														$catUsers = $Parking->getCategoryMembers($categoryId);
+
+														$catUsersData = $catUsers->data;
+														$catUsersNum = 0;
+														if(is_array($catUsersData)){
+															$catUsersNum = count($catUsersData);
+														}
+
 														?>
 															<tr>
 																<td><?php echo $category['name']; ?></td>
-																<td><?php echo 0 ?></td>
+																<td><?php echo $catUsersNum; ?></td>
 																<td><?php echo $category['createdDate']; ?></td>
 																<td class="text-right">
 																	<a href="?cid=<?=$categoryId?>" class="btn btn-round btn-info btn-icon btn-sm like"><i class="fas fa-angle-right"></i></a>

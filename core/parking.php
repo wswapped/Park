@@ -88,6 +88,23 @@
 			}
 		}
 
+		function carPlate($carId){
+			global $conn;
+
+			//Returns plate of the cars' id
+			$query = $conn->query("SELECT plate FROM cars WHERE id = \"$carId\" ");
+			if($query){
+				if($query->num_rows){
+					$data = $query->fetch_assoc();
+					return WEB::respond(true, "", $data['plate']);
+				}else{
+					return WEB::respond(false, "Error: car does not exist");
+				}
+			}else{
+				return WEB::respond(false, "Error: $conn->error");
+			}
+		}
+
 		public function getTypeUsers($type){
 			//finds the types of the user
 			global $conn;
@@ -181,9 +198,9 @@
 			# Details on the category
 			global $conn;
 
-			$query = $conn->query("SELECT * FROM categories WHERE id = \"$categoryId\" AND archived = 'no' ");
+			$query = $conn->query("SELECT * FROM category_users WHERE category = \"$categoryId\" AND archived = 'no' ");
 			if($query){
-				$data = $query->fetch_assoc();
+				$data = $query->fetch_all(MYSQLI_ASSOC);
 				return WEB::respond(true, '', $data);
 			}else{
 				return WEB::respond(false, "There was a database error $conn->error");
