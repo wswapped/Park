@@ -31,7 +31,6 @@ $(document).ready(function(){
 					if(ret.status){
 						location.reload();
 					}else{
-						console.log($(this))
 						addCategoryMemberFormElem.find('.feedBack').append("<p class='text-danger'>"+ret.msg+"</p>");
 					}
 			})

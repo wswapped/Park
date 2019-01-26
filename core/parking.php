@@ -61,8 +61,31 @@
 			}
 		}
 
-		public function getCarId($plate){
-			
+		public function getCarId($plate, $userId=false){
+			global $conn;
+			//returns the id of the car and create it
+			$userId = (int)$userId;
+
+			//check if it is their
+			$query = $conn->query("SELECT * FROM cars WHERE plate = \"$plate\" ");
+			if($query){
+				if($query->num_rows){
+					//car exist
+					$data = $query->fetch_assoc();
+					return WEB::respond(true, "", $data['id']);
+				}else{
+					//here we insert the car
+					$iquery = $conn->query("INSERT INTO cars(plate, createdBy) VALUES(\"$plate\", $userId) ");
+					if($iquery){
+						// return the id
+						return WEB::respond(true, "", $conn->insert_id);
+					}else{
+						return WEB::respond(false, "Error inserting car: $conn->error");
+					}
+				}
+			}else{
+				return WEB::respond(false, "Error: $conn->error");
+			}
 		}
 
 		public function getTypeUsers($type){
@@ -173,15 +196,22 @@
 			global $conn;
 
 			//CHECK IF the car is available
-			$
+			$carData = $this->getCarId($plate, $userId);
+			if($carData->status){
+				$carId = $carData->data;
 
-			$query = $conn->query("INSERT INTO category_users(car, expiryDate, category, createdBy) VALUES(\"\") AND archived = 'no' ");
-			if($query){
-				$data = $query->fetch_assoc();
-				return WEB::respond(true, '', $data);
+				$sql = "INSERT INTO category_users(car, expiryDate, category, createdBy) VALUES(\"$carId\", \"$expiryDate\", \"$categoryId\", \"$userId\")";
+				$query = $conn->query($sql);
+				if($query){
+					return WEB::respond(true, 'Member added successfully');
+				}else{
+					return WEB::respond(false, "There was a database error $conn->error");
+				}
 			}else{
-				return WEB::respond(false, "There was a database error $conn->error");
+				return WEB::respond(false, $carData->msg);
 			}
+
+			
 		}
 
 		public function addCategory($parkingId, $name, $description, $userId){

@@ -230,24 +230,18 @@ if($action == 'carEntry'){
 	//Adding car member to category
 	$plate = $request['plate']??"";
 	$expiryDate = $request['expiryDate']??"";
-	$category = $request['categoryId']??"";
+	$category = $request['category']??"";
 	$userId = $request['userId']??"";
 
 	//check if all form essentials were set
 	if($plate && $expiryDate && $category && $userId){
-		//here we can add the category
-		$catStatus = $Parking->addCategory($parking, $name, $description, $userId);
+
+		//formating expiryDate
+		$expiryDate = date(DB_DATE_FORMAT, strtotime($expiryDate));
+
+		$catStatus = $Parking->addCategoryMembers($plate, $expiryDate, $category, $userId);
 		if($catStatus->status){
-			//category created successfully
-			//lets check if the fees were also specified
-			if(!empty($fees)){
-				$categoryId = $catStatus->data;
-				
-				//lets add money
-				foreach ($fees as $duration => $fee) {
-					$Parking->addCategoryFee($categoryId, $duration, $fee, $userId);
-				}
-			}
+			//member added successfully
 			$response = WEB::respond(true);
 		}else{
 			$response = WEB::respond(false, $catStatus->msg);
