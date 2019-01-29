@@ -61,7 +61,7 @@
 			}
 		}
 
-		public function getCarId($plate, $userId=false){
+		public function getVehicleId($plate, $userId=false){
 			global $conn;
 			//returns the id of the car and create it
 			$userId = (int)$userId;
@@ -83,6 +83,26 @@
 						return WEB::respond(false, "Error inserting car: $conn->error");
 					}
 				}
+			}else{
+				return WEB::respond(false, "Error: $conn->error");
+			}
+		}
+
+		public function getVehicleActiveCategories($carId){
+			global $conn;
+
+			//Returns the categories the auto belongs in
+			$query = $conn->query("SELECT * FROM category_users WHERE car = \"$carId\" AND expiryDate < NOW() ");
+			if($query){
+
+				//categories
+				$cats = array();
+
+				if($query->num_rows){
+					$cats = $query->fetch_all(MYSQLI_ASSOC);
+				}
+
+				return WEB::respond(true, "", $cats);
 			}else{
 				return WEB::respond(false, "Error: $conn->error");
 			}
@@ -213,17 +233,34 @@
 			global $conn;
 
 			//CHECK IF the car is available
-			$carData = $this->getCarId($plate, $userId);
+			$carData = $this->getVehicleId($plate, $userId);
 			if($carData->status){
+
 				$carId = $carData->data;
 
-				$sql = "INSERT INTO category_users(car, expiryDate, category, createdBy) VALUES(\"$carId\", \"$expiryDate\", \"$categoryId\", \"$userId\")";
-				$query = $conn->query($sql);
-				if($query){
-					return WEB::respond(true, 'Member added successfully');
+				//check if there is another active category
+				$catsData = $this->getVehicleActiveCategories($carId);
+				$vehicleCats = $catsData->data;
+
+				if($catsData->status){
+
+					if(!count($vehicleCats)){
+						//vehicle does not belong in category
+
+						$sql = "INSERT INTO category_users(car, expiryDate, category, createdBy) VALUES(\"$carId\", \"$expiryDate\", \"$categoryId\", \"$userId\")";
+						$query = $conn->query($sql);
+						if($query){
+							return WEB::respond(true, 'Member added successfully');
+						}else{
+							return WEB::respond(false, "There was a database error $conn->error");
+						}
+					}else{
+						return WEB::respond(false, "Error: vehicle belong in other categories");
+					}
 				}else{
-					return WEB::respond(false, "There was a database error $conn->error");
+					return $catsData;
 				}
+				
 			}else{
 				return WEB::respond(false, $carData->msg);
 			}
