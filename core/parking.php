@@ -305,6 +305,25 @@
 				return WEB::respond(false, "Error adding category duration fee $conn->error");
 			}
 		}
+
+		public function getCameras($parking, $function = 'entry'){
+			//returns the cameras in the parking
+			global $conn;
+
+			$query = $conn->query("SELECT * FROM parking_cameras WHERE parking = \"$parking\" AND function LIKE \"%$function%\" ");
+			if($query){
+				$cameras = array();
+
+				if($query->num_rows){
+					$cameras = $query->fetch_all(MYSQLI_ASSOC);
+				}
+
+				return WEB::respond(true, "", $cameras);
+
+			}else{
+				return WEB::respond(false, "Error $conn->error");
+			}
+		}
 	}
 	$Parking = new parking();
 ?>

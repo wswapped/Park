@@ -38,12 +38,20 @@
 									$pname = $parkingData['name'];
 									$plocation = $parkingData['location'];
 									$pcapacity = $parkingData['capacity'];
+
+									//cameras
+									$cameras = $Parking->getCameras($parkId);
+
+									$nCameras = 0;
+									if($cameras->status){
+										$nCameras = count($cameras->data);
+									}
 									?>
 										<tr>
 											<td><?php echo $pname; ?></td>
 											<td><?php echo $plocation; ?></td>
 											<td><?php echo $pcapacity; ?></td>
-											<td>2</td>
+											<td><a href="cameras?pid=<?=$parkId?>"><?=$nCameras?></a></td>
 											<td class="text-right">
 												<a href="categories?pid=<?=$parkId?>" class="btn btn-round btn-info btn-icon btn-sm"><i class="fas fa-angle-right"></i></a>
 												<a href="#" class="btn btn-round btn-warning btn-icon btn-sm edit"><i class="fas fa-plus"></i></a>

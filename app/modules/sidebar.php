@@ -16,10 +16,6 @@
 </div>
 
 <div class="sidebar-wrapper">
-	<?php
-
-		// var_dump($currentUser);
-	?>
 	<div class="user">
 		<div class="photo">
 			<img src="/<?php echo $currentUser->profilePicture ?>" />
@@ -111,33 +107,11 @@
 			<div class="collapse " id="formsExamples">
 				<ul class="nav">
 					<li >
-						<a href="forms/regular.html">
-							<span class="sidebar-mini-icon">RF</span>
-							<span class="sidebar-normal"> Regular Forms </span>
+						<a href="cameras">
+							<span class="sidebar-mini-icon">VW</span>
+							<span class="sidebar-normal"> View </span>
 						</a>
 					</li>
-				
-					<li >
-						<a href="forms/extended.html">
-							<span class="sidebar-mini-icon">EF</span>
-							<span class="sidebar-normal"> Extended Forms </span>
-						</a>
-					</li>
-				
-					<li >
-						<a href="forms/validation.html">
-							<span class="sidebar-mini-icon">V</span>
-							<span class="sidebar-normal"> Validation Forms </span>
-						</a>
-					</li>
-				
-					<li >
-						<a href="forms/wizard.html">
-							<span class="sidebar-mini-icon">W</span>
-							<span class="sidebar-normal"> Wizard </span>
-						</a>
-					</li>
-				
 				</ul>
 			</div>
 		</li>
