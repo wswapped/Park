@@ -8,6 +8,7 @@ include_once '../../core/conn.php';
 include_once '../../core/web.php';
 include_once '../../core/user.php';
 include_once '../../core/parking.php';
+include_once '../../core/camera.php';
 include_once '../../core/movements.php';
 
 define('DB_DATE_FORMAT', 'Y-m-d H:i:s');
@@ -59,9 +60,7 @@ if($action == 'carEntry'){
 		}
 	}else{
 		$response = form_response(false, 'You moved very recently, just '.abs($interval));
-	}
-
-	
+	}	
 }else if($action == 'carExit'){
 	//Mark the exit of the car
 	$carPlate = $request['carPlate']??"";
@@ -221,6 +220,34 @@ if($action == 'carEntry'){
 			$response = WEB::respond(true);
 		}else{
 			$response = WEB::respond(false, $catStatus->msg);
+		}
+	}else{
+		//somethng was wrong
+		$response = WEB::respond(false, 'Form was not filled well. Please check if all fields are filled and with correct values');
+	}
+}else if($action == 'addParkingCamera'){
+	//Adding parking camera
+	$usage = $request['usage']??"";
+	$description = $request['description']??"";
+	$address = $request['address']??"";
+	$parking = $request['parking']??"";
+	$userId = $request['userId']??"";
+
+	//check if all camera essentials were set
+	if($usage && $description && $address && $parking && $userId){
+
+		//add camera
+		$cameraAdd = $Camera->add($address, $userId);
+
+		if($cameraAdd->status){
+			//Associate the camera with parking
+			$cameraId = $cameraAdd->data['id'];
+			$associate = $Parking->addCamera($cameraId, $usage, $parking, $description, $userId);
+
+			$response = $associate;
+
+		}else{
+			$response = $cameraAdd;
 		}
 	}else{
 		//somethng was wrong

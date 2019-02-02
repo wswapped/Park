@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 25, 2019 at 12:59 PM
+-- Generation Time: Feb 02, 2019 at 07:41 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.0
 
@@ -25,6 +25,35 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `cameras`
+--
+
+CREATE TABLE `cameras` (
+  `id` int(11) NOT NULL,
+  `address` varchar(1024) NOT NULL COMMENT 'Network address',
+  `createdDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdBy` int(11) NOT NULL,
+  `updatedDate` timestamp NULL DEFAULT NULL,
+  `updatedBy` int(11) DEFAULT NULL,
+  `archived` enum('no','yes') NOT NULL DEFAULT 'no',
+  `archievedDate` timestamp NULL DEFAULT NULL,
+  `archivedBy` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Cameras are stored here';
+
+--
+-- Dumping data for table `cameras`
+--
+
+INSERT INTO `cameras` (`id`, `address`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`, `archived`, `archievedDate`, `archivedBy`) VALUES
+(1, 'rtsp://192.168.11.230', '2019-02-02 18:11:41', 1, NULL, NULL, 'no', NULL, NULL),
+(2, 'rtsp://192.168.11.230', '2019-02-02 18:12:01', 1, NULL, NULL, 'no', NULL, NULL),
+(3, 'rtsp://192.168.11.230', '2019-02-02 18:13:04', 1, NULL, NULL, 'no', NULL, NULL),
+(4, 'rtsp://192.168.11.230', '2019-02-02 18:28:15', 1, NULL, NULL, 'no', NULL, NULL),
+(5, 'rtsp://192.168.11.230', '2019-02-02 18:31:41', 1, NULL, NULL, 'no', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `cars`
 --
 
@@ -39,6 +68,13 @@ CREATE TABLE `cars` (
   `archievedDate` timestamp NULL DEFAULT NULL,
   `archivedBy` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Keep cars';
+
+--
+-- Dumping data for table `cars`
+--
+
+INSERT INTO `cars` (`id`, `plate`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`, `archived`, `archievedDate`, `archivedBy`) VALUES
+(1, 'RAC210K', '2019-01-26 09:33:48', 1, NULL, NULL, 'no', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -67,7 +103,15 @@ CREATE TABLE `categories` (
 
 INSERT INTO `categories` (`id`, `name`, `description`, `parking`, `isDefault`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`, `archived`, `archievedDate`, `archivedBy`) VALUES
 (1, 'Normal', 'Normal parking users', 1, 0, '2019-01-23 09:38:17', 1, NULL, NULL, 'no', NULL, NULL),
-(2, 'Normal', 'Normal parking users', 1, 0, '2019-01-23 09:46:24', 1, NULL, NULL, 'no', NULL, NULL);
+(2, 'Normal', 'Normal parking users', 1, 0, '2019-01-23 09:46:24', 1, NULL, NULL, 'no', NULL, NULL),
+(3, '', '', 0, 0, '2019-01-26 09:08:17', 1, NULL, NULL, 'no', NULL, NULL),
+(4, '', '', 0, 0, '2019-01-26 09:08:20', 1, NULL, NULL, 'no', NULL, NULL),
+(5, '02/22/2019 11:07 AM', '1', 0, 0, '2019-01-26 09:30:07', 1, NULL, NULL, 'no', NULL, NULL),
+(6, '01/31/2019 11:30 AM', '1', 0, 0, '2019-01-26 09:30:32', 1, NULL, NULL, 'no', NULL, NULL),
+(7, '01/26/2019 11:30 AM', '1', 0, 0, '2019-01-26 09:30:43', 1, NULL, NULL, 'no', NULL, NULL),
+(8, '01/26/2019 11:30 AM', '1', 0, 0, '2019-01-26 09:30:44', 1, NULL, NULL, 'no', NULL, NULL),
+(9, '01/26/2019 11:30 AM', '1', 0, 0, '2019-01-26 09:31:36', 1, NULL, NULL, 'no', NULL, NULL),
+(10, '01/26/2019 11:30 AM', '1', 0, 0, '2019-01-26 09:31:53', 1, NULL, NULL, 'no', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -107,6 +151,7 @@ INSERT INTO `category_fees` (`id`, `category`, `duration`, `fee`, `createdDate`,
 CREATE TABLE `category_users` (
   `id` int(11) NOT NULL,
   `car` int(11) NOT NULL COMMENT 'key to the car',
+  `category` int(11) NOT NULL COMMENT 'category to add user',
   `expiryDate` timestamp NULL DEFAULT NULL COMMENT 'Date until which user can access with this category',
   `createdDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `createdBy` int(11) NOT NULL,
@@ -116,6 +161,25 @@ CREATE TABLE `category_users` (
   `archievedDate` timestamp NULL DEFAULT NULL,
   `archivedBy` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Users of the category';
+
+--
+-- Dumping data for table `category_users`
+--
+
+INSERT INTO `category_users` (`id`, `car`, `category`, `expiryDate`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`, `archived`, `archievedDate`, `archivedBy`) VALUES
+(1, 1, 1, '0000-00-00 00:00:00', '2019-01-26 09:33:48', 1, NULL, NULL, 'no', NULL, NULL),
+(2, 1, 1, '0000-00-00 00:00:00', '2019-01-26 09:34:35', 1, NULL, NULL, 'no', NULL, NULL),
+(3, 1, 1, '0000-00-00 00:00:00', '2019-01-26 09:35:00', 1, NULL, NULL, 'no', NULL, NULL),
+(4, 1, 1, '2019-01-26 09:30:00', '2019-01-26 09:37:38', 1, NULL, NULL, 'no', NULL, NULL),
+(5, 1, 1, '2019-01-26 09:30:00', '2019-01-26 09:37:50', 1, NULL, NULL, 'no', NULL, NULL),
+(6, 1, 1, '2019-01-26 09:30:00', '2019-01-26 09:38:10', 1, NULL, NULL, 'no', NULL, NULL),
+(7, 1, 1, '2019-01-26 09:30:00', '2019-01-26 09:38:48', 1, NULL, NULL, 'no', NULL, NULL),
+(8, 1, 1, '2019-01-26 09:30:00', '2019-01-26 09:39:07', 1, NULL, NULL, 'no', NULL, NULL),
+(9, 1, 1, '2019-01-26 09:30:00', '2019-01-26 09:39:23', 1, NULL, NULL, 'no', NULL, NULL),
+(10, 1, 1, '2019-01-26 09:30:00', '2019-01-26 09:40:06', 1, NULL, NULL, 'no', NULL, NULL),
+(11, 1, 1, '2019-02-23 16:13:00', '2019-01-26 16:13:39', 1, NULL, NULL, 'no', NULL, NULL),
+(12, 1, 1, '2019-02-23 16:13:00', '2019-01-26 16:13:44', 1, NULL, NULL, 'no', NULL, NULL),
+(13, 1, 1, '2019-02-23 16:13:00', '2019-01-26 16:15:35', 1, NULL, NULL, 'no', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1474,6 +1538,35 @@ INSERT INTO `parking` (`id`, `name`, `location`, `lat`, `lng`, `addedDate`, `arc
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `parking_cameras`
+--
+
+CREATE TABLE `parking_cameras` (
+  `id` int(11) NOT NULL,
+  `camera` int(11) NOT NULL,
+  `parking` int(11) NOT NULL,
+  `function` enum('entry','exit') NOT NULL COMMENT 'camera used for entry or exit?',
+  `description` varchar(1024) NOT NULL,
+  `createdDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `createdBy` int(11) NOT NULL,
+  `updatedDate` timestamp NULL DEFAULT NULL,
+  `updatedBy` int(11) DEFAULT NULL,
+  `archived` enum('no','yes') NOT NULL DEFAULT 'no',
+  `archievedDate` timestamp NULL DEFAULT NULL,
+  `archivedBy` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Associates parking and cameras';
+
+--
+-- Dumping data for table `parking_cameras`
+--
+
+INSERT INTO `parking_cameras` (`id`, `camera`, `parking`, `function`, `description`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`, `archived`, `archievedDate`, `archivedBy`) VALUES
+(1, 4, 1, '', 'Normal parking users', '2019-02-02 18:28:15', 1, NULL, NULL, 'no', NULL, NULL),
+(2, 5, 1, 'exit', 'Normal parking users', '2019-02-02 18:31:41', 1, NULL, NULL, 'no', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `parking_roles`
 --
 
@@ -1639,10 +1732,17 @@ INSERT INTO `users` (`id`, `name`, `email`, `phoneNumber`, `profilePicture`, `ge
 --
 
 --
+-- Indexes for table `cameras`
+--
+ALTER TABLE `cameras`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `cars`
 --
 ALTER TABLE `cars`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `plate` (`plate`);
 
 --
 -- Indexes for table `categories`
@@ -1660,7 +1760,8 @@ ALTER TABLE `category_fees`
 -- Indexes for table `category_users`
 --
 ALTER TABLE `category_users`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cat_users-car` (`car`);
 
 --
 -- Indexes for table `movement`
@@ -1672,6 +1773,12 @@ ALTER TABLE `movement`
 -- Indexes for table `parking`
 --
 ALTER TABLE `parking`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `parking_cameras`
+--
+ALTER TABLE `parking_cameras`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1719,16 +1826,22 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `cameras`
+--
+ALTER TABLE `cameras`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `cars`
 --
 ALTER TABLE `cars`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `category_fees`
@@ -1740,7 +1853,7 @@ ALTER TABLE `category_fees`
 -- AUTO_INCREMENT for table `category_users`
 --
 ALTER TABLE `category_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `movement`
@@ -1753,6 +1866,12 @@ ALTER TABLE `movement`
 --
 ALTER TABLE `parking`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `parking_cameras`
+--
+ALTER TABLE `parking_cameras`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `parking_roles`
@@ -1787,6 +1906,12 @@ ALTER TABLE `users`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `category_users`
+--
+ALTER TABLE `category_users`
+  ADD CONSTRAINT `cat_users-car` FOREIGN KEY (`car`) REFERENCES `cars` (`id`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `parking_roles`
