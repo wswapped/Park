@@ -35,6 +35,7 @@ if($action == 'carEntry'){
 
 	//check if the car has entered in less than a minute ago
 	$lastMovement = $Movement->lastMovement($carPlate);
+	$interval = 0;
 	if($lastMovement->status){
 		$movement = $lastMovement->data;
 
@@ -45,6 +46,10 @@ if($action == 'carEntry'){
 			//here user need to wait for a minute
 			$timeConstraint = 1;
 		}
+	}else{
+		//Has never been here
+		$timeConstraint = 3;
+		$interval = 0;
 	}
 
 	//check time constraint

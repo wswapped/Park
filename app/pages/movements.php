@@ -39,8 +39,10 @@
 									$parksId[] = $parkings[$n]['id'];
 								}
 								$mvt = $Movement->parkList($parksId);
+								// print_r($mvt);
 								$userParking = $Parking->userList($currentUserId);
 								foreach ($mvt as $key => $move) {
+									print_r($move);
 									$exitTime = '-';
 									$fees = '0';
 									if($move['exitMovement']){

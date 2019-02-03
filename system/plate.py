@@ -6,21 +6,25 @@ import pdb
 import cProfile as cp
 from server import server
 
-def recognize(queue=None, frame=None):
+def recognize(queue=None, frame=None, camera=None):
 	# Start the profiler
 	pr = cp.Profile()
+
+	camera = str(camera)
 
 	n = 0;
 	while True:
 		pr.enable()
 		n = n+1
 		# //saving frame as current
-		frameFile = os.path.sep.join(('alpr', 'samples', "current.jpg"))
+		frameFile = os.path.sep.join(('alpr', 'samples', camera+"_current.jpg"))
+
 		queueData = queue.get()
 		frameData = queueData['frame']
 		movementType = queueData['movement']
 		
 		if len(frameData)>0:
+			print(frameFile)
 			cv2.imwrite(frameFile, frameData)
 			# queSize = queue.qsize();
 			# pr.disable()
@@ -60,7 +64,7 @@ def recognize(queue=None, frame=None):
 				print('True Plate: '+str(detectedPlate))
 
 				if detectedPlate:
-					print("movement"+movementType)
+					print("movement "+movementType)
 					serverInst = server('http://www.park.rw', 'api/index.php')
 
 					if(movementType == 'entry'):
@@ -68,6 +72,7 @@ def recognize(queue=None, frame=None):
 					elif(movementType == 'exit'):
 						data = serverInst.exitCar(detectedPlate['plate'], 1, 1)
 					print(data)
+					print(data.text)
 
 		else:
 			print("No frame found")

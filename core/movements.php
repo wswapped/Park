@@ -15,7 +15,8 @@
 			if(is_array($parkingId)){
 				$parkingQ = implode($parkingId, ", ");
 				//select entry
-				$query = $conn->query("SELECT * FROM movement WHERE parking IN ($parkingQ) AND type = 'entry' ORDER BY time DESC ") or trigger_error("Error $conn->error");
+				$sql = "SELECT * FROM movement WHERE parking IN ($parkingQ) AND type = 'entry' ORDER BY movement.time DESC ";
+				$query = $conn->query($sql) or trigger_error("Error $conn->error");
 				$movement = array();
 				while ($data = $query->fetch_assoc()) {
 					//check the corresponding exit
@@ -31,6 +32,7 @@
 					}
 					$movement[] = $data;
 				}
+				// print_r($movement);/
 				return $movement;
 			}else{
 				return false;
