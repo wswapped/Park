@@ -5,11 +5,9 @@
 
 		$transactionId = $_POST['transactionid'];
 
-
 		$conn->query("UPDATE transactions SET status = \"$status\" WHERE transId = \"$transactionid\" ");
 
 		$ret = array();
 		echo json_encode();
 	}
-
 ?>

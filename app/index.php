@@ -54,7 +54,7 @@
 
 
 	//list of core classes to load
-	$listToLoad = array('parking', 'movements');
+	$listToLoad = array('parking', 'movements', 'camera');
 
 	foreach ($listToLoad as $key => $class) {
 		require "../core/$class.php";

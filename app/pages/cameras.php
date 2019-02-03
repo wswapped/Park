@@ -57,10 +57,15 @@
 															<div id="feedBack"></div> 										
 															<div class="form-group">
 																<select class="selectpicker" id="functionInput" data-style="btn btn-info btn-round" title="Function" data-size="7">
-								                                    <option value="2">Entry </option>
-								                                    <option value="3">Exit</option>
+								                                    <option value="entry">Entry </option>
+								                                    <option value="exit">Exit</option>
 								                                </select>
 															</div>
+															<div class="form-group">
+																<label for="descriptionInput">Alias</label>
+																<input type="text" class="form-control" id="aliasInput" aria-describedby="emailHelp" placeholder="Enter short name to refer to this camera">
+															</div>
+
 															<div class="form-group">
 																<label for="descriptionInput">Description</label>
 																<input type="text" class="form-control" id="descriptionInput" aria-describedby="emailHelp" placeholder="Describe this camera">
@@ -87,6 +92,7 @@
 								<table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
 									<thead>
 										<tr>
+											<th>Alias</th>
 											<th>Function</th>
 											<th>Address</th>
 											<th>Created</th>
@@ -95,6 +101,7 @@
 									</thead>
 									<tfoot>
 										<tr>
+											<th>Alias</th>
 											<th>Function</th>
 											<th>Address</th>
 											<th>Created</th>
@@ -107,16 +114,20 @@
 												//get cameras
 												$cameras = $Parking->getCameras($parkingId);
 												$categories = $Parking->categories($parkingId);
-												var_dump($cameras);
 
 												if($cameras->status){
 													$categories = $categories->data;
-													foreach ($cameras as $key => $camera) {
-														$categoryId = $category['id'];
-														$pricing = "";
-
+													foreach ($cameras->data as $key => $camera) {
+														$cameraId = $camera["camera"];
 														//uSERS of the category
-														$catUsers = $Parking->getCategoryMembers($categoryId);
+														$cameraDetails = $Camera->details($cameraId);
+
+														//Getting camera address
+														$camAddress = "";
+														if($cameraDetails->status){
+															$camAddress = $cameraDetails->data['address'];
+														}
+														
 
 														$catUsersData = $catUsers->data;
 														$catUsersNum = 0;
@@ -126,9 +137,10 @@
 
 														?>
 															<tr>
-																<td><?php echo $category['name']; ?></td>
-																<td><?php echo $catUsersNum; ?></td>
-																<td><?php echo $category['createdDate']; ?></td>
+																<td><?php echo $camera['alias']; ?></td>
+																<td><?php echo ucfirst($camera['function']); ?></td>
+																<td><?php echo $camAddress; ?></td>
+																<td><?php echo $camera['createdDate']; ?></td>
 																<td class="text-right">
 																	<a href="?cid=<?=$categoryId?>" class="btn btn-round btn-info btn-icon btn-sm like"><i class="fas fa-angle-right"></i></a>
 																	<a href="#" class="btn btn-round btn-warning btn-icon btn-sm edit"><i class="fas fa-plus"></i></a>
