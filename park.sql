@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 02, 2019 at 07:41 PM
+-- Generation Time: Feb 03, 2019 at 09:46 AM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.0
 
@@ -49,7 +49,9 @@ INSERT INTO `cameras` (`id`, `address`, `createdDate`, `createdBy`, `updatedDate
 (2, 'rtsp://192.168.11.230', '2019-02-02 18:12:01', 1, NULL, NULL, 'no', NULL, NULL),
 (3, 'rtsp://192.168.11.230', '2019-02-02 18:13:04', 1, NULL, NULL, 'no', NULL, NULL),
 (4, 'rtsp://192.168.11.230', '2019-02-02 18:28:15', 1, NULL, NULL, 'no', NULL, NULL),
-(5, 'rtsp://192.168.11.230', '2019-02-02 18:31:41', 1, NULL, NULL, 'no', NULL, NULL);
+(5, 'rtsp://192.168.11.230', '2019-02-02 18:31:41', 1, NULL, NULL, 'no', NULL, NULL),
+(6, 'rtsp://192.168.11.230', '2019-02-03 07:28:26', 1, NULL, NULL, 'no', NULL, NULL),
+(7, 'rtsp://192.168.11.230', '2019-02-03 07:29:54', 1, NULL, NULL, 'no', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1546,6 +1548,7 @@ CREATE TABLE `parking_cameras` (
   `camera` int(11) NOT NULL,
   `parking` int(11) NOT NULL,
   `function` enum('entry','exit') NOT NULL COMMENT 'camera used for entry or exit?',
+  `alias` varchar(32) DEFAULT NULL,
   `description` varchar(1024) NOT NULL,
   `createdDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `createdBy` int(11) NOT NULL,
@@ -1560,9 +1563,10 @@ CREATE TABLE `parking_cameras` (
 -- Dumping data for table `parking_cameras`
 --
 
-INSERT INTO `parking_cameras` (`id`, `camera`, `parking`, `function`, `description`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`, `archived`, `archievedDate`, `archivedBy`) VALUES
-(1, 4, 1, '', 'Normal parking users', '2019-02-02 18:28:15', 1, NULL, NULL, 'no', NULL, NULL),
-(2, 5, 1, 'exit', 'Normal parking users', '2019-02-02 18:31:41', 1, NULL, NULL, 'no', NULL, NULL);
+INSERT INTO `parking_cameras` (`id`, `camera`, `parking`, `function`, `alias`, `description`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`, `archived`, `archievedDate`, `archivedBy`) VALUES
+(1, 4, 1, '', NULL, 'Normal parking users', '2019-02-02 18:28:15', 1, NULL, NULL, 'no', NULL, NULL),
+(2, 5, 1, 'exit', NULL, 'Normal parking users', '2019-02-02 18:31:41', 1, NULL, NULL, 'no', NULL, NULL),
+(3, 7, 1, 'entry', 'entry_south', 'Hello there we have added this camera to help us in the monitoring of the south gate entry cars', '2019-02-03 07:29:54', 1, NULL, NULL, 'no', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1829,7 +1833,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cameras`
 --
 ALTER TABLE `cameras`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `cars`
@@ -1871,7 +1875,7 @@ ALTER TABLE `parking`
 -- AUTO_INCREMENT for table `parking_cameras`
 --
 ALTER TABLE `parking_cameras`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `parking_roles`

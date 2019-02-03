@@ -23,5 +23,11 @@ class server:
 
 		print(response.json());
 
+	def getCamera(self, alias):
+		# Get the details of the camera
+		response = requests.post(self.apiAddress, data = {'action':'getCamera', 'alias':alias})
+
+		cameraDetails = response.json();
+
 # serverInst = server('http://localhost', 'smartpark/api/index.php')
 # data = serverInst.enterCar('RAD324B', 1, 1)

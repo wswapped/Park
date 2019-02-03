@@ -21,7 +21,6 @@ cameraAddresses = {
 	'entry_south':"rtsp://192.168.11.252",
 	'entry_north':"rtsp://192.168.11.251",
 	'exit':"rtsp://192.168.11.250",
-
 }
 
 openCameraAddress = cameraAddresses[openCamera]

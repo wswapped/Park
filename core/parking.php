@@ -153,7 +153,7 @@
 			return $users;
 		}
 
-		public function addCamera($cameraId, $function, $parking, $description, $userId){
+		public function addCamera($cameraId, $function, $parking, $alias, $description, $userId){
 			//associates camera to parking
 
 			//check if the camera exists already
@@ -161,7 +161,7 @@
 			$query = $conn->query("SELECT * FROM parking_cameras WHERE camera = \"$cameraId\" AND parking = \"$parking\" ");
 			if($query){
 				if(!$query->num_rows){
-					$q1 = $conn->query("INSERT INTO parking_cameras(camera, parking, description, function, createdBy) VALUES(\"$cameraId\", \"$parking\", \"$description\", \"$function\", \"$userId\") ");
+					$q1 = $conn->query("INSERT INTO parking_cameras(camera, parking, alias, description, function, createdBy) VALUES(\"$cameraId\", \"$parking\", \"$alias\", \"$description\", \"$function\", \"$userId\") ");
 					if($q1){
 						return WEB::respond(true, "", array('id'=>$conn->insert_id));
 					}else{

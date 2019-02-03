@@ -62,6 +62,11 @@
 								                                </select>
 															</div>
 															<div class="form-group">
+																<label for="descriptionInput">Alias</label>
+																<input type="text" class="form-control" id="aliasInput" aria-describedby="emailHelp" placeholder="Enter short name to refer to this camera">
+															</div>
+
+															<div class="form-group">
 																<label for="descriptionInput">Description</label>
 																<input type="text" class="form-control" id="descriptionInput" aria-describedby="emailHelp" placeholder="Describe this camera">
 															</div>
@@ -87,6 +92,7 @@
 								<table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
 									<thead>
 										<tr>
+											<th>Alias</th>
 											<th>Function</th>
 											<th>Address</th>
 											<th>Created</th>
@@ -95,6 +101,7 @@
 									</thead>
 									<tfoot>
 										<tr>
+											<th>Alias</th>
 											<th>Function</th>
 											<th>Address</th>
 											<th>Created</th>
@@ -130,6 +137,7 @@
 
 														?>
 															<tr>
+																<td><?php echo $camera['alias']; ?></td>
 																<td><?php echo ucfirst($camera['function']); ?></td>
 																<td><?php echo $camAddress; ?></td>
 																<td><?php echo $camera['createdDate']; ?></td>
