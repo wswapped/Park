@@ -18,7 +18,6 @@ args = parser.parse_args()
 openCamera = args.camera
 
 cameraAddresses = {
-<<<<<<< HEAD
 	'entry_south':
 		{
 		'address': "rtsp://192.168.11.252",
@@ -31,12 +30,6 @@ cameraAddresses = {
 	'exit':
 		{'address': "rtsp://192.168.11.250", 'function':'exit',
 		'slug':'exit'},
-
-=======
-	'entry_south':"rtsp://192.168.11.252",
-	'entry_north':"rtsp://192.168.11.251",
-	'exit':"rtsp://192.168.11.250",
->>>>>>> f1579919c2eb80d7b116497d1ba9eb1dd704c951
 }
 
 openCameraAddress = cameraAddresses[openCamera]['address']
