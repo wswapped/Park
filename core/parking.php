@@ -88,11 +88,11 @@
 			}
 		}
 
-		public function getVehicleActiveCategories($carId){
+		public function getVehicleActiveCategories($carId, $parking=""){
 			global $conn;
 
 			//Returns the categories the auto belongs in
-			$query = $conn->query("SELECT * FROM category_users WHERE car = \"$carId\" AND expiryDate < NOW() ");
+			$query = $conn->query("SELECT CU.* FROM category_users AS CU INNER JOIN categories AS CT ON CU.category = CT.id WHERE CU.car = \"$carId\" AND CT.parking LIKE \"%$parking%\" AND CU.expiryDate < NOW() ");
 			if($query){
 
 				//categories
@@ -106,6 +106,17 @@
 			}else{
 				return WEB::respond(false, "Error: $conn->error");
 			}
+		}
+
+		public function getVehicleChargingCategory($car, $parking){
+			//returns a category to which we use to charge a car in certain parking
+			global $conn;
+
+			//check active categories
+			$activeCategories = $this->getVehicleActiveCategories($car, $parking);
+
+			var_dump($activeCategories);
+
 		}
 
 		function carPlate($carId){
@@ -286,8 +297,6 @@
 			}else{
 				return WEB::respond(false, $carData->msg);
 			}
-
-			
 		}
 
 		public function addCategory($parkingId, $name, $description, $userId){
@@ -301,6 +310,23 @@
 				//query has failed
 				return WEB::respond(false, "Error creating category $conn->error");
 			}
+		}
+
+		public function getParkingFee($carId, $parking, $duration){
+			//
+			global $conn;
+
+			//check the category a car belongs in
+			$categories = $this->getVehicleChargingCategory($carId, $parking);
+
+			if($categories->status){
+				$category = $categories->data;
+
+				// var_dump($category);
+			}else{
+				return $categories;
+			}
+
 		}
 
 		public function categoryFees($categoryId){

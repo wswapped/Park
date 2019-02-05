@@ -1,5 +1,5 @@
 <?php
-	class movement{
+	class movement extends parking{
 		public function add($name, $username, $phone, $email, $profile_picture = '', $gender='')
 		{
 			# adds system user
@@ -23,12 +23,23 @@
 					$car = $data['car'];
 					$entryTime = $data['time'];
 
-
 					$sql = "SELECT * FROM movement WHERE parking IN($parkingQ) AND type = 'exit' AND time>\"$entryTime\" LIMIT 1";
 					$exiQ = $conn->query($sql) or trigger_error($conn->error);
 					$data['exitMovement'] = '';
+					$data['duration'] = '';
+					$data['fees'] = '';
 					if($exiQ->num_rows){
-						$data['exitMovement'] = $exiQ->fetch_assoc();
+						$exitMovement = $exiQ->fetch_assoc();
+
+						$exitTime = $exitMovement['time'];
+
+						$interval = strtotime($exitTime) - strtotime($entryTime);
+
+						$minutes = $interval/(3600);
+
+						$fees = $this->getParkingFee($car, $minutes);
+
+						$data['exitMovement'] = $exitMovement;
 					}
 					$movement[] = $data;
 				}
