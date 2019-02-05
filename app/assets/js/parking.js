@@ -1,16 +1,7 @@
 $(document).ready(function() {
-	$('#datatable').DataTable({
-	  "pagingType": "full_numbers",
-	  "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-	  responsive: true,
-	  language: {
-	  search: "_INPUT_",
-	  searchPlaceholder: "Search records",
-	  }
-
+	var table = $('#datatable').DataTable({
+		"order": [[ 2, "desc" ]]
 	});
-
-	var table = $('#datatable').DataTable();
 
 	// Edit record
 	table.on( 'click', '.edit', function () {
@@ -32,9 +23,4 @@ $(document).ready(function() {
 	  table.row($tr).remove().draw();
 	  e.preventDefault();
 	} );
-
-	//Like record
-	table.on( 'click', '.like', function () {
-	  alert('You clicked on Like button');
-	});
 });
