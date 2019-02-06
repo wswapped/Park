@@ -37,7 +37,7 @@
 
 						$minutes = $interval/(3600);
 
-						$fees = $this->getParkingFee($car, $minutes);
+						$fees = $this->getParkingFee($car, $data['parking'], $minutes);
 
 						$data['exitMovement'] = $exitMovement;
 					}

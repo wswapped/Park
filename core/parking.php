@@ -113,9 +113,24 @@
 			global $conn;
 
 			//check active categories
+
 			$activeCategories = $this->getVehicleActiveCategories($car, $parking);
 
-			var_dump($activeCategories);
+			if($activeCategories->status){
+				//get categories
+				$catsData = $activeCategories->data;
+
+				if($catsData){
+					//we choose with one to go with
+					return WEB::respond(true, "", $catsData[0]);
+				}else{
+					//get parking's default category
+					return $this->getDefaultCategory($parking);
+				}
+			}else{
+				return $activeCategories;
+			}
+			die();
 
 		}
 
@@ -228,6 +243,26 @@
 			}
 		}
 
+		public function getDefaultCategory($parkingId){
+			//returns the default category
+			$categories = $this->categories($parkingId);
+
+			if($categories->status){
+				$cats = $categories->data;
+				//find the default category
+				foreach ($cats as $key => $cat) {
+					if($cat['isDefault']){
+						return WEB::respond(true, "", $cat);
+					}
+				}
+
+				//If nothing was returned then return error of no default category
+				return WEB::respond(true, "No default category found");
+			}else{
+				return $categories;
+			}
+		}
+
 		public function getCategory($categoryId)
 		{
 			# Details on the category
@@ -318,11 +353,21 @@
 
 			//check the category a car belongs in
 			$categories = $this->getVehicleChargingCategory($carId, $parking);
-
 			if($categories->status){
 				$category = $categories->data;
 
-				// var_dump($category);
+				$categoryId = $category['id'];
+
+				//Here we have to get the plans of this category
+				$feePlans = $this->categoryFees($categoryId);
+
+				if($feePlans->status){
+					//Check the durations
+					$feesData = $feePlans->data;	
+					var_dump($feesData);
+				}else{
+					return $feePlans;
+				}
 			}else{
 				return $categories;
 			}
