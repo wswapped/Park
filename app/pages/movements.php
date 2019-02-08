@@ -40,13 +40,14 @@
 								}
 								$mvt = $Movement->parkList($parksId);
 								$userParking = $Parking->userList($currentUserId);
+
+
 								foreach ($mvt as $key => $move) {
 									$exitTime = '-';
-									$fees = '0';
+									$fees = $move['fees'];
 									if($move['exitMovement']){
 										$exitM = $move['exitMovement'];
 										$exitTime = date(STANDARD_TIMETEXT_FORMAT, strtotime($exitM['time']));
-										$fees = 200;
 									}
 									?>
 										<tr>

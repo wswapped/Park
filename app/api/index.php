@@ -259,8 +259,8 @@ if($action == 'carEntry'){
 		//somethng was wrong
 		$response = WEB::respond(false, 'Form was not filled well. Please check if all fields are filled and with correct values');
 	}
-}else if(){
-	getCamera
+}else if($action='getCamera'){
+	// getCamera
 }else if($action == 'addCategoryMember'){
 	//Adding car member to category
 	$plate = $request['plate']??"";

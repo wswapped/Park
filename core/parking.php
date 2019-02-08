@@ -337,7 +337,16 @@
 		public function addCategory($parkingId, $name, $description, $userId){
 			//adds the parking category in the database
 			global $conn;
-			$sql = "INSERT INTO categories(name, description, parking, createdBy) VALUES(\"$name\", \"$description\", \"$parkingId\", \"$userId\")";
+
+			//check if there is a default category
+			$defaultFlag = 0;
+			$defaultCat = $this->getDefaultCategory($parkingId);
+			if($defaultCat->status){
+				//here we need ti add this as default
+				$defaultFlag = 1;
+			}
+
+			$sql = "INSERT INTO categories(name, description, parking, isDefault, createdBy) VALUES(\"$name\", \"$description\", \"$parkingId\", \"$defaultFlag\", \"$userId\")";
 			$query = $conn->query($sql);
 			if($query){
 				return WEB::respond(true, "", $conn->insert_id);
@@ -355,6 +364,7 @@
 			$categories = $this->getVehicleChargingCategory($carId, $parking);
 			if($categories->status){
 				$category = $categories->data;
+				// die();
 
 				$categoryId = $category['id'];
 
@@ -363,8 +373,17 @@
 
 				if($feePlans->status){
 					//Check the durations
-					$feesData = $feePlans->data;	
-					var_dump($feesData);
+					$feesData = $feePlans->data;
+					$fee = 0;
+
+					foreach ($feesData as $key => $plan) {
+						$dur = (float)($plan['duration'].".000");
+						if($dur >= "$duration"){
+							$fee = $plan['fee'];
+						}
+					}
+
+					return WEB::respond(true, '', $fee);
 				}else{
 					return $feePlans;
 				}

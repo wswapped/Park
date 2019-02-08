@@ -38,12 +38,14 @@
 						$minutes = $interval/(3600);
 
 						$fees = $this->getParkingFee($car, $data['parking'], $minutes);
+						if($fees->status){
+							$data['fees'] = $fees->data;
+						}
 
 						$data['exitMovement'] = $exitMovement;
 					}
 					$movement[] = $data;
 				}
-				// print_r($movement);/
 				return $movement;
 			}else{
 				return false;
